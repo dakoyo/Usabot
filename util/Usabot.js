@@ -36,7 +36,7 @@ class Usabot {
                 imageBuffer = await res.arrayBuffer();
             } catch {}
         }
-        const res = await this.#bard.ask(this.prompts.main.content + message, {
+        const res = await this.#bard.ask(this.prompts.main.content + message.split(`<@1065829601194033262>`).join("うさぼっと"), {
             ids: ids ?? this.#usabotIds,
             image: imageBuffer,
             format: Bard.JSON
