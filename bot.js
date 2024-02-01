@@ -5,6 +5,8 @@ import webhook from "./util/webhook.js";
 
 import util from "util";
 
+import sch from "node-schedule"
+
 import vm from "vm";
 
 import { config } from "./prompts/config.js";
@@ -57,6 +59,7 @@ export async function system() {
             Math,
             usabot,
             webhook,
+            sch,
             console: {
                 async log(...content) {
                     for (const c of content) {
