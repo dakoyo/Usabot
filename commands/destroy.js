@@ -19,5 +19,6 @@ export const command = {
           content: "クライアントを停止しました",
           ephemeral: true
         })
+        process.exit(0);
     }
 }
