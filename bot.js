@@ -155,7 +155,7 @@ export async function system() {
         }, async () => {
             try {
                 const embeds = await createArticle(usabot);
-                await client.channels.cache.get("1102471031081418804").send({ content: "# USABOTNEWS", embeds })
+                await client.channels.cache.get("1193152456838893568").send({ content: "# USABOTNEWS", embeds })
             } catch (err) {
                 console.warn(err);
             }
