@@ -1,4 +1,4 @@
-import Discord, { EmbedBuilder } from "discord.js";
+import Discord from "discord.js";
 
 import Usabot from "./util/Usabot.js";
 import webhook from "./util/webhook.js";
@@ -10,6 +10,8 @@ import sch from "node-schedule"
 import vm from "vm";
 
 import { config } from "./prompts/config.js";
+
+import DiscordDB from "./util/discordDB.js";
 
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -23,7 +25,8 @@ export async function system() {
         intents: Object.values(Discord.GatewayIntentBits)
     });
     let usabot = new Usabot();
-    const plugins = JSON.parse(fs.readFileSync("./plugins.json"));
+    /**@type {DiscordDB} */
+    let db;
     client.once("ready", async () => {
         client.user.setPresence({
             status: "idle",
@@ -33,6 +36,14 @@ export async function system() {
                 }
             ]
         })
+        db = new DiscordDB(client, "1197044190295625768");
+        const developers = await db.get("developers");
+        if (!developers) await db.set("developers", []);
+        let plugins = await db.get("plugins");
+        if (!plugins) {
+            await db.set("plugins", []);
+            plugins = [];
+        }
         console.log(`${client.user.username}としてログイン完了`);
         for (const fileName of fs.readdirSync("./commands")) {
             if (!fileName.endsWith(".js")) continue;
@@ -129,13 +140,25 @@ export async function system() {
                 }
             } catch { }
         }
+        const status = await db.get("status") ?? "英語コミュニケーション";
         client.user.setPresence({
             status: "online",
             activities: [
                 {
-                    name: "英語コミュニケーション",
+                    name: status
                 }
             ]
+        })
+        sch.scheduleJob({
+            hour: 6,
+            minute: 0
+        }, async () => {
+            try {
+                const embeds = await createArticle(usabot);
+                await client.channels.cache.get("1102471031081418804").send({ content: "# USABOTNEWS", embeds })
+            } catch (err) {
+                console.warn(err);
+            }
         })
     });
 
@@ -144,7 +167,7 @@ export async function system() {
             const execute = commandData.get(interaction.commandName);
             if (execute) {
                 try {
-                    await execute(interaction, client);
+                    await execute(interaction, client, db, usabot);
                 } catch (e) {
                     console.warn(e);
                 }
@@ -240,8 +263,79 @@ export async function system() {
             })
         }
     })
-
     client.login(process.env.DISCORD_TOKEN);
 }
 
 system();
+
+
+export async function createArticle(usabot) {
+    const embeds = []
+    const res_newsAPI = await fetch(`https://newsapi.org/v2/top-headlines?country=jp&apiKey=${process.env.NEWS_API_KEY}`)
+        .then(r => r.json());
+    for (let i = 1; i <= 9; i++) {
+        const articleData = res_newsAPI.articles[i]
+        if (articleData) {
+            const article = {
+                title: articleData.title,
+                description: articleData.description,
+                url: articleData.url,
+                image: articleData.urlToImage,
+                publishedAt: articleData.publishedAt,
+                author: articleData.author
+            }
+            const embed = new Discord.EmbedBuilder();
+            embed.setTitle(article.title);
+            embed.setDescription(article.description)
+            embed.setImage(article.image);
+            embed.setColor("Blue");
+            embed.setURL(article.url)
+            if (article.author) embed.setAuthor({
+                name: article.author
+            });
+            embeds.push(embed);
+        }
+    }
+    const res_weather = await fetch("https://weather.tsukumijima.net/api/forecast/city/240010")
+        .then(r => r.json());
+    const todayWeather = res_weather.forecasts[0];
+    const res = await usabot.ask(`
+    こちらは今日の津市の天気予報です。まとめてください
+    
+    天気：${todayWeather.telop ?? "不明"}
+    風：${todayWeather.detail.wind ?? "不明"}
+    波の高さ：${todayWeather.detail.wave ?? "不明"}
+    
+    # 気温
+    最高気温（摂氏）：${todayWeather.temperature.max.celsius}
+    最低気温（摂氏）：${todayWeather.temperature.min.celsius}
+    
+    # 降水確率
+    0時から6時まで：${todayWeather.chanceOfRain.T00_06 == "--%" ? "--" : todayWeather.chanceOfRain.T00_06}
+    6時から12時まで：${todayWeather.chanceOfRain.T06_12 == "--%" ? "--" : todayWeather.chanceOfRain.T06_12}
+    12時から18時まで：${todayWeather.chanceOfRain.T12_18 == "--%" ? "--" : todayWeather.chanceOfRain.T12_18}
+    18時から24時まで：${todayWeather.chanceOfRain.T18_24 == "--%" ? "--" : todayWeather.chanceOfRain.T18_24}
+    `)
+    const embed = new Discord.EmbedBuilder()
+    .setTitle("天気予報")
+    .setDescription(res.content)
+    .setColor("White");
+    switch (todayWeather.telop) {
+        case "晴れ":
+            embed.setImage("http://flat-icon-design.com/f/f_traffic_4/s256_f_traffic_4_0bg.png")
+            break;
+        case "曇り":
+            embed.setImage("http://flat-icon-design.com/f/f_traffic_4/s512_f_traffic_4_1bg.png")
+            break;
+        case "雨":
+            embed.setImage("http://flat-icon-design.com/f/f_traffic_5/s512_f_traffic_5_0bg.png")
+            break;
+        
+        default:
+            break;
+    }
+    embeds.push(
+        embed
+    )
+    return embeds
+}

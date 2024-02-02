@@ -10,8 +10,8 @@ export const command = {
      * @param {Discord.CommandInteraction} interaction 
      * @param {Discord.Client} client
      */
-    async execute(interaction, client) {
-        const developers = JSON.parse(fs.readFileSync("./developers.json", "utf8"));
+    async execute(interaction, client, db) {
+        const developers = await db.get("developers");
         const embed = new EmbedBuilder()
         .setTitle("開発者リスト")
         .setDescription(developers.length > 0 ? developers.map(d => `<@${d}>`).join("\n") : "開発者はいません")

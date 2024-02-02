@@ -8,5 +8,6 @@ export const config = {
         "ました。": "ましたー！",
         "こんにちは": "Good afternoon."
     },
-    outputChannel: "1197044190295625768"
+    outputChannel: "1197044190295625768",
+    maintenance: true
 }

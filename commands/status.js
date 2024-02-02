@@ -4,8 +4,9 @@ import DiscordDB from "../util/discordDB.js";
 
 export const command = {
     data: new Discord.SlashCommandBuilder()
-        .setName("destroy")
-        .setDescription("クライアントを停止する"),
+        .setName("status")
+        .setDescription("ステータスを設定する")
+        .addStringOption(option => option.setName("statusname").setDescription("ステータス名")),
     /**
      * 
      * @param {Discord.CommandInteraction} interaction 
@@ -16,11 +17,14 @@ export const command = {
         const developers = await db.get("developers");
         if (!developers.includes(interaction.user.id)) 
         return interaction.reply({ephemeral: true, content: "権限が足りません"});
-        await client.destroy();
+        const status = interaction.options.get("statusname").value;
+        await db.set("status", status);
+        client.user.setActivity({
+            name: status
+        });
         await interaction.reply({
-          content: "クライアントを停止しました",
-          ephemeral: true
+            ephemeral: true,
+            content: `ステータスを"${status}"に設定しました`
         })
-        process.exit(0);
     }
 }

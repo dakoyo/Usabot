@@ -13,10 +13,10 @@ export const command = {
      * @param {Discord.CommandInteraction} interaction 
      * @param {Discord.Client} client
      */
-    async execute(interaction, client) {
-        const developers = JSON.parse(fs.readFileSync("./developers.json", "utf8"));
+    async execute(interaction, client, db) {
+        const developers = await db.get("developers")
         if (!developers.includes(interaction.user.id)) return interaction.reply({ ephemeral: true, content: "権限が足りません" });
-        const plugins = JSON.parse(fs.readFileSync("./plugins.json", "utf-8"));
+        const plugins = await db.get("plugins");
         const modal = new ModalBuilder();
         for (let i = 0; i < 5; i++) {
             const pluginInput = new ActionRowBuilder()
@@ -41,7 +41,7 @@ export const command = {
                 for (let i = 0; i < 5; i++) {
                     plugins.push(interaction.fields.getTextInputValue(`plugininput${i}`));
                 }
-                fs.writeFileSync("./plugins.json", JSON.stringify(plugins));
+                await db.set("plugins", plugins);
                 await interaction.reply({
                     ephemeral: true,
                     content: "✅ **SUCCESS**"

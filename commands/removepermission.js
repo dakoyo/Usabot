@@ -10,10 +10,10 @@ export const command =  {
      * 
      * @param {Discord.CommandInteraction} interaction 
      */
-    async execute(interaction) {
-        const developers = JSON.parse(fs.readFileSync("./developers.json", "utf8"));
+    async execute(interaction, client, db) {
+        const developers = await db.get("developers")
         if (developers.includes(interaction.user.id)) {
-            fs.writeFileSync("./developers.json",JSON.stringify(developers.filter(d => d !== interaction.user.id)));
+            await db.set("developers",developers.filter(d => d !== interaction.user.id));
             await interaction.reply({
                 ephemeral: true,
                 content: "権限を削除しました"

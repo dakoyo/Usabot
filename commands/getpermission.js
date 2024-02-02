@@ -11,16 +11,16 @@ export const command = {
      * @param {Discord.CommandInteraction} interaction 
      * @param {Discord.Client} client
      */
-    async execute(interaction, client) {
+    async execute(interaction, client, db) {
         const token = interaction.options.get("token")?.value;
-        const developers = JSON.parse(fs.readFileSync("./developers.json", "utf8"));
+        const developers = await db.get("developers");
         if (developers.includes(interaction.user.id)) return await interaction.reply({
             ephemeral: true,
             content: "あなたはすでに権限を保有しています。"
         });
         if (process.env.DISCORD_TOKEN == token) {
             developers.push(interaction.user.id);
-            fs.writeFileSync("./developers.json",JSON.stringify(developers));
+            await db.set("developers", developers);
             await interaction.reply({
                 ephemeral: true,
                 content: "権限を取得しました"

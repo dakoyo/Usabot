@@ -13,8 +13,8 @@ export const command = {
      * @param {Discord.CommandInteraction} interaction 
      * @param {Discord.Client} client
      */
-    async execute(interaction, client) {
-        const developers = JSON.parse(fs.readFileSync("./developers.json", "utf8"));
+    async execute(interaction, client, db) {
+        const developers = await db.get("developers")
         if (!developers.includes(interaction.user.id)) 
         return interaction.reply({ephemeral: true, content: "権限が足りません"});
         await interaction.reply({
