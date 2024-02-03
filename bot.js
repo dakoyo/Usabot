@@ -33,7 +33,9 @@ export async function system() {
         app.get("/", async (req, res) => {
             try {
                 await client.users.fetch("987876263316295710");
+                res.send("Hello, world");
             } catch (err) {
+                res.send("reload");
                 console.warn(err);
                 await client.login(process.env.DISCORD_TOKEN);
             }
