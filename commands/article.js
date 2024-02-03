@@ -23,6 +23,6 @@ export const command = {
             content: `記事を書きます`
         })
         const embeds = await createArticle(usabot, db);
-        await interaction.channel.send({ content: "# USABOTNEWS", embeds })        
+        await interaction.channel.send({ content: "# USABOTNEWS\n# <@&1203237149663830036>", embeds })        
     }
 }

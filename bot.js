@@ -6,7 +6,7 @@ import webhook from "./util/webhook.js";
 
 import util from "util";
 
-import sch from "node-schedule"
+import cron from "node-cron"
 
 import vm from "vm";
 
@@ -40,7 +40,7 @@ export async function system() {
                 await client.login(process.env.DISCORD_TOKEN);
             }
         })
-        app.listen(process.env.PORT | 3002);
+        // app.listen(process.env.PORT | 3002);
         client.user.setPresence({
             status: "idle",
             activities: [
@@ -83,7 +83,7 @@ export async function system() {
             Math,
             usabot,
             webhook,
-            sch,
+            cron,
             console: {
                 async log(...content) {
                     for (const c of content) {
@@ -162,14 +162,10 @@ export async function system() {
                 }
             ]
         })
-        sch.scheduleJob({
-            hour: 6,
-            minute: 0,
-            second: 0
-        }, async () => {
+        cron.schedule(`0 0 6 * * *`, async () => {
             try {
                 const embeds = await createArticle(usabot, db);
-                await client.channels.cache.get("1193152456838893568").send({ content: "# USABOTNEWS", embeds })
+                await client.channels.cache.get("1193152456838893568").send({ content: "# USABOTNEWS\n# <@&1203237149663830036>", embeds })
             } catch (err) {
                 console.warn(err);
             }
@@ -196,7 +192,7 @@ export async function system() {
             if (loaded) {
                 let responseMessage
                 try {
-                    let embed = new EmbedBuilder()
+                    let embed = new Discord.EmbedBuilder()
                         .setTitle("Generating...")
                         .setImage("https://media.discordapp.net/attachments/1193152456838893568/1202055004257792080/ld.gif?ex=65cc0ff6&is=65b99af6&hm=21261db61a1586a1b3512b435517e4d36434ab428fd7d5560d0db176c7a8adc8&=&width=400&height=100")
                         .setColor("00ffff");
@@ -205,7 +201,7 @@ export async function system() {
                     const ids = AIchatCache.get(message.reference?.messageId);
                     const res = await usabot.ask(message.content, ids, imageURL);
                     const firstLine = res.content.split("\n")[0]
-                    embed = new EmbedBuilder()
+                    embed = new Discord.EmbedBuilder()
                         .setTitle(firstLine)
                         .setDescription(res.content.replace(firstLine, ""))
                         .setColor("00ffff");
@@ -287,7 +283,7 @@ export async function createArticle(usabot, db) {
     const embeds = []
     const res_newsAPI = await fetch(`https://newsapi.org/v2/top-headlines?country=jp&apiKey=${process.env.NEWS_API_KEY}`)
         .then(r => r.json());
-    for (let i = 1; i <= 8; i++) {
+    for (let i = 1; i <= 7; i++) {
         const articleData = res_newsAPI.articles[i]
         if (articleData) {
             const article = {
@@ -385,7 +381,49 @@ export async function createArticle(usabot, db) {
             } catch {}
         }
     }
-    embeds.push(new Discord.EmbedBuilder().setTitle("本日の単語（システム英単語より）").setColor("Red").setDescription(tangoDescription.join("\n")))
+    embeds.push(new Discord.EmbedBuilder().setTitle("本日の単語（システム英単語より）").setColor("Red").setDescription(tangoDescription.join("\n")));
+    const learnedTango = [];
+    let count = 0;
+    for (const t in tango) {
+        if (count > (day - 1) * 10 + 9) continue;
+        learnedTango.push(t)
+        count++
+    }
+    const cloneArray = [...learnedTango]
+
+    for (let i = cloneArray.length - 1; i >= 0; i--) {
+      let rand = Math.floor(Math.random() * (i + 1))
+      let tmpStorage = cloneArray[i]
+      cloneArray[i] = cloneArray[rand]
+      cloneArray[rand] = tmpStorage
+    }
+    count = 0;
+    const tikaradamesi = [];
+    for (const t of cloneArray) {
+        if (count > 9) continue;
+        const Bard = (await import("bard-ai")).default
+        const bard = new Bard(process.env.BARD_COOKIE);
+        const answer = await bard.ask([
+            `${t}の英単語を使って英語の3~5語程度の例文を一つだけ生成してください`,
+            "レスポンスはJSONで",
+            "```json",
+            "{",
+            '   "english": 英語の3~5語程度の例文,',
+            '   "japanese": 上の例文の訳',
+            '}',
+            "```",
+            "のように生成してください"
+        ].join("\n"));
+        const match = answer.match(/```json\s*({[^`]*})\s*```/);
+        if (match) {
+            try {
+                const text = JSON.parse(match[1])
+                tikaradamesi.push(`> ### ${text.english} : (||${text.japanese}||)\n`);
+            } catch {}
+        }
+        count++
+    }
+    embeds.push(new Discord.EmbedBuilder().setTitle("力試し").setDescription("今までの単語から出題しています\n" + tikaradamesi.join("\n")).setColor("Orange"));
     await db.set("day", day + 1);
     return embeds
 }
