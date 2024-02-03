@@ -30,7 +30,7 @@ export async function system() {
     /**@type {DiscordDB} */
     let db;
     client.once("ready", async () => {
-        app.get("/", async (req, res) => {
+        app.get("/load/", async (req, res) => {
             try {
                 await client.users.fetch("987876263316295710");
                 res.send("Hello, world");
