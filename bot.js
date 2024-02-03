@@ -162,7 +162,7 @@ export async function system() {
                 }
             ]
         })
-        cron.schedule(`0 0 6 * * *`, async () => {
+        cron.schedule(`0 0 21 * * *`, async () => {
             try {
                 const embeds = await createArticle(usabot, db);
                 await client.channels.cache.get("1193152456838893568").send({ content: "# USABOTNEWS\n# <@&1203237149663830036>", embeds })
