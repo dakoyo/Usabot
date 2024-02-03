@@ -164,7 +164,8 @@ export async function system() {
         })
         sch.scheduleJob({
             hour: 6,
-            minute: 0
+            minute: 0,
+            second: 0
         }, async () => {
             try {
                 const embeds = await createArticle(usabot, db);
