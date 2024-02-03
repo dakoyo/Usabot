@@ -167,7 +167,7 @@ export async function system() {
             minute: 0
         }, async () => {
             try {
-                const embeds = await createArticle(usabot);
+                const embeds = await createArticle(usabot, db);
                 await client.channels.cache.get("1193152456838893568").send({ content: "# USABOTNEWS", embeds })
             } catch (err) {
                 console.warn(err);
@@ -280,13 +280,13 @@ export async function system() {
 }
 
 system();
+import { tango } from "./data/tango.js";
 
-
-export async function createArticle(usabot) {
+export async function createArticle(usabot, db) {
     const embeds = []
     const res_newsAPI = await fetch(`https://newsapi.org/v2/top-headlines?country=jp&apiKey=${process.env.NEWS_API_KEY}`)
         .then(r => r.json());
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 1; i <= 8; i++) {
         const articleData = res_newsAPI.articles[i]
         if (articleData) {
             const article = {
@@ -335,7 +335,7 @@ export async function createArticle(usabot) {
     .setColor("White");
     switch (todayWeather.telop) {
         case "晴れ":
-            embed.setImage("http://flat-icon-design.com/f/f_traffic_4/s256_f_traffic_4_0bg.png")
+            embed.setImage("http://flat-icon-design.com/f/f_traffic_7/s256_f_traffic_7_0bg.png")
             break;
         case "曇り":
             embed.setImage("http://flat-icon-design.com/f/f_traffic_4/s512_f_traffic_4_1bg.png")
@@ -350,5 +350,41 @@ export async function createArticle(usabot) {
     embeds.push(
         embed
     )
+
+    let day = await db.get("day");
+    if (!day) {
+        day = 1
+        await db.set("day", 1);
+    }
+    const tangoDescription = [
+        `システム英単語本冊ではミニマルフレーズとともに暗記できます`
+    ];
+    for (let i   = (day - 1) * 10; i <= (day - 1) * 10 + 9; i++) {
+        const tangoName = Object.keys(tango)[i];
+        const tangoMean = tango[tangoName];
+        const Bard = (await import("bard-ai")).default
+        const bard = new Bard(process.env.BARD_COOKIE);
+        const answer = await bard.ask([
+            `${tangoName}の英単語を使って英語の3~5語程度の例文を一つだけ生成してください`,
+            "レスポンスはJSONで",
+            "```json",
+            "{",
+            '   "english": 英語の3~5語程度の例文,',
+            '   "japanese": 上の例文の訳',
+            '}',
+            "```",
+            "のように生成してください"
+        ].join("\n"));
+        const match = answer.match(/```json\s*({[^`]*})\s*```/);
+        tangoDescription.push(`## ${tangoName}: (||${tangoMean}||)`);
+        if (match) {
+            try {
+                const text = JSON.parse(match[1])
+                tangoDescription.push(`**${text.english}**: **(||${text.japanese}||)**\n`);
+            } catch {}
+        }
+    }
+    embeds.push(new Discord.EmbedBuilder().setTitle("本日の単語（システム英単語より）").setColor("Red").setDescription(tangoDescription.join("\n")))
+    await db.set("day", day + 1);
     return embeds
 }
