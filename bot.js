@@ -1,3 +1,4 @@
+import express from "express";
 import Discord from "discord.js";
 
 import Usabot from "./util/Usabot.js";
@@ -19,6 +20,7 @@ dotenv.config();
 import fs from "fs";
 export async function system() {
     const commands = [];
+    const app = express();
     const commandData = new Map();
     let loaded = false;
     const client = new Discord.Client({
@@ -28,6 +30,15 @@ export async function system() {
     /**@type {DiscordDB} */
     let db;
     client.once("ready", async () => {
+        app.get("/", async (req, res) => {
+            try {
+                await client.users.fetch("987876263316295710");
+            } catch (err) {
+                console.warn(err);
+                await client.login(process.env.DISCORD_TOKEN);
+            }
+        })
+        app.listen(process.env.PORT | 3002);
         client.user.setPresence({
             status: "idle",
             activities: [
