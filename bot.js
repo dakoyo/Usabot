@@ -165,7 +165,7 @@ export async function system() {
         cron.schedule(`0 0 21 * * *`, async () => {
             try {
                 const embeds = await createArticle(usabot, db);
-                await client.channels.cache.get("1193152456838893568").send({ content: "# USABOTNEWS\n# <@&1203237149663830036>", embeds })
+                await client.channels.cache.get("1102471031081418804").send({ content: "# USABOTNEWS\n# <@&1203237149663830036>", embeds })
             } catch (err) {
                 console.warn(err);
             }
