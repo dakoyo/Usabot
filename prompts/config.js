@@ -9,9 +9,9 @@ export const config = {
         "こんにちは": "Good afternoon."
     },
     outputChannel: "1197044190295625768",
-    debug: true,
+    debug: false,
     articleTime: {
-        hour: 8,
-        minute: 39
+        hour: 6,
+        minute: 0
     }
 }
