@@ -6,7 +6,7 @@ import webhook from "./util/webhook.js";
 
 import util from "util";
 
-import cron from "node-cron"
+import sch from "node-schedule"
 
 import vm from "vm";
 
@@ -83,7 +83,7 @@ export async function system() {
             Math,
             usabot,
             webhook,
-            cron,
+            sch,
             console: {
                 async log(...content) {
                     for (const c of content) {
@@ -162,10 +162,17 @@ export async function system() {
                 }
             ]
         })
-        cron.schedule(`0 0 21 * * *`, async () => {
+        const hour = config.articleTime.hour - 9 < 0 ? config.articleTime.hour + 15 : config.articleTime.hour - 9
+        const minute = config.articleTime.minute;
+        sch.scheduleJob({
+            hour,
+            minute
+        }, async () => {
             try {
+                console.log("記事の執筆を開始")
                 const embeds = await createArticle(usabot, db);
                 await client.channels.cache.get("1102471031081418804").send({ content: "# USABOTNEWS\n# <@&1203237149663830036>", embeds })
+                console.log("記事の執筆が完了")
             } catch (err) {
                 console.warn(err);
             }
@@ -295,11 +302,11 @@ export async function createArticle(usabot, db) {
                 author: articleData.author
             }
             const embed = new Discord.EmbedBuilder();
-            embed.setTitle(article.title);
-            embed.setDescription(article.description)
-            embed.setImage(article.image);
+            if (article.title) embed.setTitle(article.title);
+            if (article.description) embed.setDescription(article.description)
+            if (article.image) embed.setImage(article.image);
             embed.setColor("Blue");
-            embed.setURL(article.url)
+            if (article.url) embed.setURL(article.url)
             if (article.author) embed.setAuthor({
                 name: article.author
             });
