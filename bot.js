@@ -40,7 +40,7 @@ export async function system() {
                 await client.login(process.env.DISCORD_TOKEN);
             }
         })
-        // app.listen(process.env.PORT | 3002);
+        if (!config.debug) app.listen(process.env.PORT | 3002);
         client.user.setPresence({
             status: "idle",
             activities: [
