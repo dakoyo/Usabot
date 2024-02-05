@@ -3,6 +3,7 @@ import fs from "fs";
 import DiscordDB from "../util/discordDB.js";
 import { createArticle } from "../bot.js";
 import Usabot from "../util/Usabot.js";
+import util from "util";
 
 export const command = {
     data: new Discord.SlashCommandBuilder()
@@ -22,7 +23,14 @@ export const command = {
             ephemeral: true,
             content: `記事を書きます`
         })
-        const embeds = await createArticle(usabot, db);
-        await interaction.channel.send({ content: "# USABOTNEWS\n# <@&1203237149663830036>", embeds })        
+        try {
+            const embeds = await createArticle(usabot, db);
+            await interaction.channel.send({ content: "# USABOTNEWS\n# <@&1203237149663830036>", embeds })    
+        } catch (e) {
+            try {
+                console.warn(e);
+                await interaction.followUp("```js\n" + util.inspect(e) + "```")
+            } catch {}
+        }
     }
 }

@@ -40,7 +40,7 @@ export async function system() {
                 await client.login(process.env.DISCORD_TOKEN);
             }
         })
-        app.listen(process.env.PORT | 3002);
+        // app.listen(process.env.PORT | 3002);
         client.user.setPresence({
             status: "idle",
             activities: [
@@ -49,7 +49,7 @@ export async function system() {
                 }
             ]
         })
-        db = new DiscordDB(client, "1197044190295625768");
+        db = new DiscordDB(client, config.debug ?  "1159289276303933541" :"1197044190295625768");
         const developers = await db.get("developers");
         if (!developers) await db.set("developers", []);
         let plugins = await db.get("plugins");
@@ -403,7 +403,7 @@ export async function createArticle(usabot, db) {
         if (count > 9) continue;
         const Bard = (await import("bard-ai")).default
         const bard = new Bard(process.env.BARD_COOKIE);
-        const answer = await bard.ask([
+        const answer = await bard.ask(([
             `${t}の英単語を使って英語の3~5語程度の例文を一つだけ生成してください`,
             "レスポンスはJSONで",
             "```json",
@@ -413,7 +413,7 @@ export async function createArticle(usabot, db) {
             '}',
             "```",
             "のように生成してください"
-        ].join("\n"));
+        ]).join("\n"));
         const match = answer.match(/```json\s*({[^`]*})\s*```/);
         if (match) {
             try {
