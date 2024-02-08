@@ -12,6 +12,7 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "@vitalets/google-translate-api": "^9.2.0",
     "bard-ai": "^2.0.3",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.1",

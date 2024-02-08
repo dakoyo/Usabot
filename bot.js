@@ -197,25 +197,16 @@ export async function system() {
         if (message.author.bot) return;
         if (message.content.includes(`<@${client.user.id}>`) || (message.reference && message.mentions.has(client.user.id))) {
             if (loaded) {
-                let responseMessage
                 try {
-                    let embed = new Discord.EmbedBuilder()
-                        .setTitle("Generating...")
-                        .setImage("https://media.discordapp.net/attachments/1193152456838893568/1202055004257792080/ld.gif?ex=65cc0ff6&is=65b99af6&hm=21261db61a1586a1b3512b435517e4d36434ab428fd7d5560d0db176c7a8adc8&=&width=400&height=100")
-                        .setColor("00ffff");
-                    responseMessage = await message.channel.send({ embeds: [embed] });
+                    message.channel.sendTyping();
                     const imageURL = message.attachments?.first();
                     const ids = AIchatCache.get(message.reference?.messageId);
                     const res = await usabot.ask(message.content, ids, imageURL);
-                    const firstLine = res.content.split("\n")[0]
-                    embed = new Discord.EmbedBuilder()
-                        .setTitle(firstLine)
-                        .setDescription(res.content.replace(firstLine, ""))
-                        .setColor("00ffff");
-                    await responseMessage.edit({ embeds: [embed] });
+                    const responseMessage = await message.reply(res.content)
+                    AIchatCache.set(responseMessage.id, res.ids)                    
                 } catch (err) {
                     try {
-                        responseMessage?.edit({
+                        message.reply({
                             embeds: [
                                 new EmbedBuilder()
                                     .setTitle("ERROR")

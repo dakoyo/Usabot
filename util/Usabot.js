@@ -41,16 +41,14 @@ class Usabot {
             image: imageBuffer,
             format: Bard.JSON
         });
-        /**@type {String} */
-        let answer = res.content;
+        console.log(res);
+        res.content = res.content.split("\n").join("<br>");
+        const responseJSON = JSON.parse(res.content.match(/\{[\s\S]*?\}/)[0]);
+        let answer = responseJSON.content.split("<br>").join("\n");
+
         for(const word in config.replaceWords) {
             answer = answer.split(word).join(config.replaceWords[word]);
         }
-        answer = answer.split("\n").filter(a => 
-            !a.startsWith("![Image") &&
-            a !== "うさぼっと"
-            
-        ).join("\n");
         res.content = answer;
         return res;
     }
