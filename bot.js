@@ -1,6 +1,8 @@
 import express from "express";
 import Discord, { EmbedBuilder } from "discord.js";
 
+import Bard from "bard-ai";
+
 import Usabot from "./util/Usabot.js";
 import webhook from "./util/webhook.js";
 
@@ -16,6 +18,8 @@ import DiscordDB from "./util/discordDB.js";
 
 import * as dotenv from "dotenv";
 dotenv.config();
+
+const bard = new Bard(process.env.BARD_COOKIE)
 
 import fs from "fs";
 export async function system() {
@@ -357,8 +361,6 @@ export async function createArticle(usabot, db) {
     for (let i   = (day - 1) * 10; i <= (day - 1) * 10 + 9; i++) {
         const tangoName = Object.keys(tango)[i];
         const tangoMean = tango[tangoName];
-        const Bard = (await import("bard-ai")).default
-        const bard = new Bard(process.env.BARD_COOKIE);
         const answer = await bard.ask([
             `${tangoName}の英単語を使って英語の3~5語程度の例文を一つだけ生成してください`,
             "レスポンスはJSONで",
@@ -399,8 +401,6 @@ export async function createArticle(usabot, db) {
     const tikaradamesi = [];
     for (const t of cloneArray) {
         if (count > 9) continue;
-        const Bard = (await import("bard-ai")).default
-        const bard = new Bard(process.env.BARD_COOKIE);
         const answer = await bard.ask(([
             `${t}の英単語を使って英語の3~5語程度の例文を一つだけ生成してください`,
             "レスポンスはJSONで",
