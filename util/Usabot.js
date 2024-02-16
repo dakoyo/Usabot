@@ -1,5 +1,5 @@
 import fs from "fs";
-import Bard from "bard-ai";
+import Bard from "./geminiAPI.js";
 import { config } from "../prompts/config.js";
 
 class UsabotPrompt {

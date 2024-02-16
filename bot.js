@@ -1,7 +1,7 @@
 import express from "express";
 import Discord, { EmbedBuilder } from "discord.js";
 
-import Bard from "bard-ai";
+import Bard from "./util/geminiAPI.js";
 
 import Usabot from "./util/Usabot.js";
 import webhook from "./util/webhook.js";

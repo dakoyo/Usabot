@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 import fs from "fs";
-import Bard from "bard-ai";
+import Bard from "../util/geminiAPI";
 import { translate } from '@vitalets/google-translate-api';
 
 
