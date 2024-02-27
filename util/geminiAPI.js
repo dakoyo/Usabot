@@ -11,7 +11,7 @@ class Bard {
     // Resolution status of initialization call
     #initPromise;
 
-    #bardURL = "https://gemini.google.com";
+    #bardURL = "https://bard.google.com";
 
     // Wether or not to log events to console
     #verbose = false;
@@ -39,7 +39,7 @@ class Bard {
 
         // Assign headers
         this.#headers = {
-            Host: "gemini.google.com",
+            Host: "bard.google.com",
             "X-Same-Domain": "1",
             "User-Agent":
                 "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36",
@@ -75,7 +75,8 @@ class Bard {
             this.#verbose && console.log("✅ Initialization finished\n");
             return SNlM0e;
         } catch {
-            throw new Error(
+            
+            console.error(
                 "Could not use your Cookie. Make sure that you copied correctly the Cookie with name __Secure-1PSID exactly. If you are sure your cookie is correct, you may also have reached your rate limit."
             );
         }
