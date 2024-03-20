@@ -11,7 +11,7 @@ class Bard {
     // Resolution status of initialization call
     #initPromise;
 
-    #bardURL = "https://bard.google.com";
+    #bardURL = "https://gemini.google.com";
 
     // Wether or not to log events to console
     #verbose = false;
@@ -39,7 +39,7 @@ class Bard {
 
         // Assign headers
         this.#headers = {
-            Host: "bard.google.com",
+            Host: "gemini.google.com",
             "X-Same-Domain": "1",
             "User-Agent":
                 "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36",

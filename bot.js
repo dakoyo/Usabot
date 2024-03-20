@@ -1,5 +1,5 @@
 import express from "express";
-import Discord, { EmbedBuilder } from "discord.js";
+import Discord, { ActionRowBuilder, ButtonBuilder, EmbedBuilder, Emoji } from "discord.js";
 
 import Bard from "./util/geminiAPI.js";
 
@@ -23,6 +23,7 @@ const bard = new Bard(process.env.BARD_COOKIE)
 
 import fs from "fs";
 export async function system() {
+    
     const commands = [];
     const app = express();
     const commandData = new Map();
@@ -53,7 +54,8 @@ export async function system() {
                 }
             ]
         })
-        db = new DiscordDB(client, config.debug ?  "1159289276303933541" :"1197044190295625768");
+        db = new DiscordDB(client);
+        await db.init(config.debug ?  "1159289276303933541" :"1197044190295625768")
         const developers = await db.get("developers");
         if (!developers) await db.set("developers", []);
         let plugins = await db.get("plugins");
@@ -202,12 +204,16 @@ export async function system() {
         if (message.content.includes(`<@${client.user.id}>`) || (message.reference && message.mentions.has(client.user.id))) {
             if (loaded) {
                 try {
+                    console.log(config.users[message.author.id] ?? "生徒" + "->" + message.content);
                     message.channel.sendTyping();
                     const imageURL = message.attachments?.first();
                     const ids = AIchatCache.get(message.reference?.messageId);
-                    const res = await usabot.ask(message.content, ids, imageURL);
-                    const responseMessage = await message.reply(res.content)
-                    AIchatCache.set(responseMessage.id, res.ids)                    
+                    const res = await usabot.ask(message.content, ids, imageURL, config.users[message.author.id] ?? "生徒");
+                    const responseMessage = await message.reply({
+                        content: res.content, 
+                    });
+                    try {await responseMessage.react(res.emotions)} catch {}
+                    AIchatCache.set(responseMessage.id, res.ids)
                 } catch (err) {
                     try {
                         message.reply({
@@ -282,6 +288,7 @@ system();
 import { tango } from "./data/tango.js";
 
 export async function createArticle(usabot, db) {
+    return;
     const embeds = []
     const res_newsAPI = await fetch(`https://newsapi.org/v2/top-headlines?country=jp&apiKey=${process.env.NEWS_API_KEY}`)
         .then(r => r.json());
