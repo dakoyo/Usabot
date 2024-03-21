@@ -2,6 +2,7 @@ import Discord from "discord.js";
 import fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
+console.log(process.env.firstPrompt)
 
 export const client = new Discord.Client({
     intents: Object.values(Discord.GatewayIntentBits)
