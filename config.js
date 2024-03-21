@@ -6,7 +6,7 @@ const config = {
         levelupChannel: "1149227014214131752"
     },
     logChannelId: "1220245727129636874",
-    levelNoticeChannelId: "1197025456814313513",
+    levelNoticeChannelId: "1149226575603191818",
     users: {
         "987876263316295710": "だこよ",
         "1065142008127160342": "てぃなか",
