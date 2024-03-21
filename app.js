@@ -9,4 +9,4 @@ import("./bot.js");
 
 console.log(new Date())
 
-//app.listen(3000)
+app.listen(3000)
