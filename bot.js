@@ -18,6 +18,7 @@ import DiscordDB from "./util/discordDB.js";
 
 import * as dotenv from "dotenv";
 dotenv.config();
+console.log(process.env.firstPrompt)
 
 const bard = new Bard(process.env.BARD_COOKIE)
 
