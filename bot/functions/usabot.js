@@ -31,7 +31,10 @@ client.on("messageCreate", async message => {
                 ids,
                 image,
             });
-            res.content = JSON.parse(res.content.split("\n").join("<br>")).content
+            let stringJSON = res.content.split("\n").join("<br>");
+            if (stringJSON.endsWith("<br>")) stringJSON = stringJSON.slice(0, -4)
+            res.content = JSON.parse(stringJSON).content
+            
             for (const word in replaceWords) {
                 res.content = res.content.split(word).join(replaceWords[word]);
             }
