@@ -25,22 +25,23 @@ client.on("messageCreate", async message => {
             for (const user in config.users) {
                 question = question.split(`<@${user}>`).join(config.users[user]);
             }
-            const res = await gemini.ask(process.env.THIRD_PROMPT.replace(/{questioner}/g,message.author.displayName) + question, {
+            const res = await gemini.ask(process.env.THIRD_PROMPT.replace(/{questioner}/g,message.author.displayName).replace(/<br>/g, "\n") + question, {
                 format: Gemini.JSON,
                 ids,
                 image,
             });
-            res.content = JSON.parse(res.content).content
+            res.content = JSON.parse(res.content.split("\n").join("<br>")).content
             for (const word in replaceWords) {
                 res.content = res.content.split(word).join(replaceWords[word]);
             }
+            res.content = res.content.replace(/<br>/g,"\n")
             const responseMessage = await message.reply({
                 content: res.content,
             });
             chats.set(responseMessage.id, res.ids);
         } catch (err) {
             try {
-                message.reply({
+                await message.reply({
                     embeds: [
                         new EmbedBuilder()
                             .setTitle("ERROR")
