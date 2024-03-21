@@ -6,6 +6,7 @@ import { gemini, usabotChatIds } from "../setup.js";
 
 const logger = new Logger("usabot");
 const replaceWords = JSON.parse(process.env.REPLACEWORDS.split("<br>").join("\\n"));
+client.user.setActivity("英語コミュニケーション")
 
 const chats = new Map();
 client.on("messageCreate", async message => {
