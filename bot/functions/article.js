@@ -14,7 +14,7 @@ const db = new DiscordDB(client)
 const logger = new Logger("article");
 
 schedule.scheduleJob("name", {
-    hour: 5,
+    hour: 20,
     minute: 55
 }, async () => {
     console.log("記事の執筆を開始")
