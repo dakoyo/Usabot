@@ -20,17 +20,17 @@ schedule.scheduleJob("name", {
     console.log("記事の執筆を開始")
     try {
         await loadUsabot();
-        const embeds = await writeArticle();
+        //const embeds = await writeArticle();
         //const channel = client.channels.cache.get("1197025456814313513")
         /**@type {TextChannel} */
-        const channel = client.channels.cache.get("1102471031081418804");
-        const thread = await channel.threads.create({
+        //const channel = client.channels.cache.get("1102471031081418804");
+        /*const thread = await channel.threads.create({
             name: "うさぼっとNEWS " + new Date().toISOString().slice(0,10) + "号"
         })
         await thread.send({
             content: "# うさぼっとNEWS\n" + new Date().toISOString().slice(0,10) + "号",
             embeds
-        })
+        })*/
     } catch (error){
         logger.warn("Failed to write article", error)
 
