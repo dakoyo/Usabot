@@ -1,4 +1,5 @@
 import client from "../client.js";
+import Discord from "discord.js"
 
 export const command = {
     data: new Discord.SlashCommandBuilder()
