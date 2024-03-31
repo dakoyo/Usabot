@@ -1,12 +1,14 @@
 import express from "express";
 const app = express();
+import * as dotenv from "dotenv"
+import config from "./config.js";
+dotenv.config();
 
 app.get("/", (req, res) => {
-    res.send("hello");
-})
+    res.send("Hello, world");
+});
 
-import("./bot.js");
-
-console.log(new Date())
-
-app.listen(3000)
+config.dev.debugMode || app.listen(config.express.port);
+(async () => {
+    await import("./models.js");
+})();

@@ -1,4 +1,4 @@
-import { client } from "../bot.js";
+import client from "../client.js";
 import webhook from "../lib/webhook.js";
 import Logger from "../util/logger.js";
 const logger = new Logger("messageURL")

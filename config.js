@@ -1,12 +1,15 @@
 const config = {
-    db: {
-        settings: "1220256521280290936"
+    dev: {
+        logChannelId: "1220245727129636874",
+        debugMode: false,
     },
+    express: {
+        port: 3000
+    },
+    levelNoticeChannelId: "1149226575603191818",
     probot: {
         levelupChannel: "1149227014214131752"
     },
-    logChannelId: "1220245727129636874",
-    levelNoticeChannelId: "1149226575603191818",
     users: {
         "987876263316295710": "だこよ",
         "1065142008127160342": "てぃなか",

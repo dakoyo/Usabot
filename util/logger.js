@@ -1,5 +1,6 @@
+
 import util from "util";
-import { client } from "../bot.js";
+import client from "../client.js";
 import config from "../config.js";
 import Discord from "discord.js";
 class Logger {
@@ -30,7 +31,8 @@ class Logger {
     #main(content, name, colorName) {
         const e = typeof content == "string" ? content : util.inspect(content);
         console.log(`${this.name}${this.colors[colorName]}[${name}]${this.colors.reset}${e}`)
-        client.channels.cache.get(config.logChannelId).send({
+        if (client.isReady()) {
+            client.channels.cache.get(config.dev.logChannelId).send({
             embeds: [
                 new Discord.EmbedBuilder()
                     .setTitle(name)
@@ -38,6 +40,7 @@ class Logger {
                     .setDescription("```js\n" + e + "```")
             ]
         });
+    }
     }
     log(...content) {
         for (const c of content) {
