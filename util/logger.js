@@ -28,11 +28,11 @@ class Logger {
      * @param {string} name 
      * @param {string} colorName 
      */
-    #main(content, name, colorName) {
+    async #main(content, name, colorName) {
         const e = typeof content == "string" ? content : util.inspect(content);
         console.log(`${this.name}${this.colors[colorName]}[${name}]${this.colors.reset}${e}`)
         if (client.isReady()) {
-            client.channels.cache.get(config.dev.logChannelId).send({
+            await client.channels.cache.get(config.dev.logChannelId).send({
             embeds: [
                 new Discord.EmbedBuilder()
                     .setTitle(name)
@@ -42,19 +42,19 @@ class Logger {
         });
     }
     }
-    log(...content) {
+    async log(...content) {
         for (const c of content) {
-            this.#main(c, "LOG", "blue");
+            await this.#main(c, "LOG", "blue");
         }
     }
-    error(...content) {
+    async error(...content) {
         for (const c of content) {
-            this.#main(c, "ERROR", "red");
+            await this.#main(c, "ERROR", "red");
         }
     }
-    warn(...content) {
+    async warn(...content) {
         for (const c of content) {
-            this.#main(c, "WARN", "yellow");
+            await this.#main(c, "WARN", "yellow");
         }
     }
 }

@@ -48,5 +48,4 @@ command.data.addStringOption(option => {
         .setChoices(...choices)
         .setDescription("モデルを選ぶ")
         .setRequired(true)
-
 })

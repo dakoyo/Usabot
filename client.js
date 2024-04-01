@@ -27,7 +27,7 @@ client.once("ready", async () => {
 
     await searchLayer("./commands");
     client.application.commands.set(Array.from(commands.values()).map(cmd => cmd.data));
-    logger.log("login successful!");
+    await logger.log("login successful!");
     for (const d of fs.readdirSync("./bot")) {
         if (d.endsWith(".js")) await import(`./bot/${d}`);
     }
