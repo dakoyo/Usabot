@@ -4,7 +4,7 @@ const client = new Discord.Client({intents: Object.values(Discord.GatewayIntentB
 dotenv.config();
 
 client.on("messageCreate", message => {
-    console.log(message.embeds);
+    console.log(message.mentions);
 })
 
 client.login(process.env.DISCORD_TOKEN)

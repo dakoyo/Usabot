@@ -7,7 +7,7 @@ const logger = new Logger("ai");
 
 client.on("messageCreate", async message => {
     if (message.author.bot) return;
-    if (message.content.includes(`<@${client.user.id}>`) && (message.content !== `<@${client.user.id}>`) || (message.reference && Model.chatData.has(message.reference.messageId) && message.mentions.repliedUser)) {
+    if (message.content.includes(`<@${client.user.id}>`) && (message.content !== `<@${client.user.id}>`)) {
         try {
             if (!Model.current.ready) return await message.channel.send("```モデルは準備中です```")
             message.channel.sendTyping();
@@ -15,7 +15,7 @@ client.on("messageCreate", async message => {
             if (message.reference) ids = Model.chatData.get(message.reference?.messageId);
             let image = message.attachments?.first();
             message.content = message.content.split(`<@${client.user.id}>`).join(Model.current.name + "、");
-            const res = await Model.current.ask(message, ids ,image);
+            const res = await Model.current.ask(message, ids ,image?.url);
             const successful = await message.channel.send("✓");
             await successful.delete();
             let repliedMessage
