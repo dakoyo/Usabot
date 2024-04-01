@@ -52,6 +52,7 @@ class Model {
                 const member = await g.members.fetchMe()
                 member.setNickname(model.name)
             });
+            await client.user.setUsername(model.name);
         }
         this.chatData.clear();
     }
@@ -140,6 +141,10 @@ class Model {
     async load() {
         let chatIds;
         const { prompts } = this;
+        if (prompts.length < 1) {
+            this.ready = true;
+            return;
+        }
         async function query(currentIds, index) {
             const res = await gemini.ask(prompts[index], {
                 format: "json",
