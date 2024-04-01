@@ -171,7 +171,7 @@ class Model {
         let imageBuffer;
         if (imageURL) {
             try {
-                imageBuffer = await fetch(imageURL)
+                imageBuffer = await fetch(imageURL).then(r => r.arrayBuffer());
             } catch {}
         }
         if (this.#askCallback) {
