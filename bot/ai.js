@@ -16,6 +16,7 @@ client.on("messageCreate", async message => {
             let image = message.attachments?.first();
             message.content = message.content.split(`<@${client.user.id}>`).join(Model.current.name + "、");
             const res = await Model.current.ask(message, ids ,image?.url);
+            res.content = res.content.split("[Image sent]").join("画像");
             const successful = await message.channel.send("✓");
             await successful.delete();
             let repliedMessage
