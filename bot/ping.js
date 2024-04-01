@@ -9,7 +9,7 @@ client.on("messageCreate", async message => {
 
         }
     }
-    if (message.channelId == config.dev.logChannelId && message.embeds[0]?.description == "```js\nlogin successful!```") {
+    if ((message.channelId == config.dev.logChannelId) && (message.embeds[0]?.description == "```js\nlogin successful!```")) {
         await client.destroy();
     }
 })
