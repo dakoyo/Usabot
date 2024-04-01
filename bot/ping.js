@@ -16,7 +16,7 @@ setTimeout(() => {
         }
         if ((message.channelId == config.dev.logChannelId) && (message.embeds[0]?.description == "```js\nlogin successful!```")) {
             await logger.log("client destroy")
-            await client.destroy();
+            process.exit(1)
         }
     })
 },2000)
