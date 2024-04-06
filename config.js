@@ -1,7 +1,8 @@
 const config = {
     dev: {
         logChannelId: "1220245727129636874",
-        debugMode: false,
+        debugLogChannelId: "1197044190295625768",
+        debugMode: true,
     },
     express: {
         port: 3000

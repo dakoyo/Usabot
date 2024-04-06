@@ -27,8 +27,15 @@ client.on("messageCreate", async message => {
                     content: res.content
                 });
             } else {
-                repliedMessage = await message.channel.send(message.channel, {
-                    content: res.content
+                repliedMessage = await message.channel.send({
+                    embeds: [
+                        new Discord.EmbedBuilder()
+                        .setDescription(res.content)
+                        .setAuthor({
+                            name: Model.current.name,
+                            iconURL: Model.current.avatarURL
+                        })
+                    ]
                 });
             }
             Model.chatData.set(repliedMessage.id, res.ids);

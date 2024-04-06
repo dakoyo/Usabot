@@ -32,7 +32,7 @@ class Logger {
         const e = typeof content == "string" ? content : util.inspect(content);
         console.log(`${this.name}${this.colors[colorName]}[${name}]${this.colors.reset}${e}`)
         if (client.isReady()) {
-            await client.channels.cache.get(config.dev.logChannelId).send({
+            await client.channels.cache.get(config.dev.debugMode ? config.dev.debugLogChannelId : config.dev.logChannelId).send({
             embeds: [
                 new Discord.EmbedBuilder()
                     .setTitle(name)

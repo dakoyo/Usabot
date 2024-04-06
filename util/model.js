@@ -52,7 +52,6 @@ class Model {
                 const member = await g.members.fetchMe()
                 member.setNickname(model.name)
             });
-            await client.user.setUsername(model.name);
         }
         this.chatData.clear();
     }
