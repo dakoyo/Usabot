@@ -37,4 +37,4 @@ app.get("/files/*", async (req, res) => {
     }
 })
 
-app.listen(3000)
+if (!config.dev.debugMode) app.listen(3000)

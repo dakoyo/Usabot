@@ -107,26 +107,6 @@ new Model("ずんだもん")
 .register();
 
 /**---------------------------にしぼっと---------------------------- */
-new Model("にしぼっと")
-.setAvatarURL("https://ul.h3z.jp/Eb0Id061.png")
-.setCommandOptionName("nishibot")
-.setDescription("Lizzakからの某塚の印象を元に人格を形成したモデル。\n某塚に関する情報が不十分のため、十分な回答が得られない可能性がある")
-.setMode("英語コミュニケーション")
-.addPrompt(getPrompt("nishibot-info"))
-.onAsk(async ev => {
-    const { ids, gemini, imageBuffer, model, message} = ev;
-    const question = getPrompt("nishibot-main") + ((message instanceof Message) ? message.content : message);
-    const res = await gemini.ask(question, {
-        format: "json",
-        image: imageBuffer,
-        ids: ids ?? model.modelChatIds
-    })
-    if (res.content.startsWith("「") && res.content.endsWith("」")) {
-        res.content = res.content.slice(1).slice(0,-1);
-    }
-    return res;
-})
-.register();
 
 const nishibot2_replaceList = {
     "なんだよぉ！": "なんですよぉ！",
