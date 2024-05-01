@@ -152,7 +152,9 @@ new Model("うさぼっとFAST")
         ],
         model: "Llama3-70b-8192"
     })
-    return res;
+    return {
+        content: res.choices[0].message.content
+    };
 })
 .register();
 
