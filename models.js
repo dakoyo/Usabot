@@ -137,5 +137,23 @@ new Model("にしぼっと2")
 })
 .register();
 
+new Model("うさぼっとFAST")
+.setAvatarURL("https://ul.h3z.jp/d0wew77m.png")
+.setCommandOptionName("usabotfast")
+.setDescription("高速化したうさぼっとのモデル。ある程度の推論能力もある\nただし、続けて会話することはできない")
+.setMode("FAST")
+.onAsk(async ev => {
+    const { ids, gemini, imageBuffer, model, message} = ev;
+    const question = (message instanceof Message) ? message.content : message;
+    const res = await groq.chat.completions.create({
+        messages: [
+            {role: "system", content: getPrompt("usabotFAST")},
+            {role: "user", content: question}
+        ],
+        model: "Llama3-70b-8192"
+    })
+    return res;
+})
+.register();
 
 import("./client.js");
