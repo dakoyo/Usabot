@@ -151,6 +151,7 @@ new Model("うさぼっとFAST")
             {role: "system", content: getPrompt("usabotFAST")},
             {role: "user", content: question}
         ],
+        model: "Llama3-70b-8192"
     })
     return res;
 })
