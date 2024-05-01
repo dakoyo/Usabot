@@ -4,6 +4,7 @@ import Logger from "./logger.js";
 const logger = new Logger("gemini");
 import client from "../client.js";
 
+
 const gemini = new Gemini(process.env.BARD_COOKIE);
 gemini.init().catch(error => logger.error(error));
 
