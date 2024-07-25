@@ -82,6 +82,6 @@ new Model("うさぼっと4")
         return {
             content: result
         };
-    })
+    }).register();
 
 import("./client.js");
