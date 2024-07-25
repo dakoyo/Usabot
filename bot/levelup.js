@@ -13,11 +13,11 @@ client.on("messageCreate", async message => {
             const user = await client.users.fetch(userId);
             const userName = config.users[userId] ?? (user.displayName ?? "生徒");
             const level = Number(message.content.split(":")[1]);
-            const usabot_stu = Model.models.get("usabot2_stu");
+            const usabot_stu = Model.models.get("usabot4");
             let blessingMessage = {
                 content: "おめでとうございます！"
             }
-            if (usabot_stu.ready) blessingMessage = await usabot_stu.query(`It seems like "${userName}" has leveled up from ${level - 1} to ${level} on Discord! Let's congratulate them as うさぼっと!\n(Please speak Japanese)\n* ですます調（丁寧な言葉）で喋ってください\n* 回答は一文だけ生成してください`)
+            if (usabot_stu.ready) blessingMessage = await usabot_stu.query(`「${userName}」という人物のDiscordのレベルが${level - 1}から${level}に上がったみたいです！祝ってください`)
             const color = (Math.random() * 0xFFFFFF | 0).toString(16);
             const randomColor = "#" + ("000000" + color).slice(-6);
             const channel = client.channels.cache.get(config.levelNoticeChannelId);
