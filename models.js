@@ -75,7 +75,7 @@ new Model("うさぼっと4")
                 },
                 { role: "user", content: question }
             ],
-            model: "Llama3-70b-8192"
+            model: "llama-3.2-90b-text-preview"
         })
         let result = res.choices[0].message.content;
         result = result.split("はい。").join("はーーーい！！");
