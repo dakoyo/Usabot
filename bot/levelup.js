@@ -13,7 +13,7 @@ client.on("messageCreate", async message => {
             const user = await client.users.fetch(userId);
             const userName = config.users[userId] ?? (user.displayName ?? "生徒");
             const level = Number(message.content.split(":")[1]);
-            const usabot_stu = Model.models.get("usabot4");
+            const usabot_stu = Model.models.get("usabot3.2-90");
             let blessingMessage = {
                 content: "おめでとうございます！"
             }

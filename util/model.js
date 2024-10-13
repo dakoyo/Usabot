@@ -132,11 +132,15 @@ class Model {
         try {
             imageBuffer = await fetch(imageURL).then(r => r.arrayBuffer());
         } catch {}
-        return await gemini.ask(message, {
-            format: "json",
-            ids: this.modelChatIds,
-            image: imageBuffer
-        })
+        let res;
+        try {
+            res = await gemini.ask(message, {
+                format: "json",
+                ids: this.modelChatIds,
+                image: imageBuffer
+            })
+        } catch {}
+        return res
     }
     async load() {
         let chatIds;

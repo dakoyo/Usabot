@@ -45,9 +45,9 @@ new Model("うさぼっとFAST")
 
 new Model("うさぼっと4")
     .setAvatarURL("https://ul.h3z.jp/d0wew77m.png")
-    .setCommandOptionName("usabot4")
-    .setDescription("高速で、能力の高いモデル。llama-3.1-70b-versatileをチューニングして開発")
-    .setMode("うさぼっと4")
+    .setCommandOptionName("usabot3.2-90")
+    .setDescription("高速で、能力の高いモデル。llama-3.2-90bをチューニングして開発")
+    .setMode("うさぼっと3.2-90")
     .onAsk(async ev => {
         const { message } = ev;
         const question = (message instanceof Message) ? message.content : message;
@@ -55,7 +55,7 @@ new Model("うさぼっと4")
             messages: [
                 {
                     "role": "system",
-                    "content": getPrompt("usabot4")
+                    "content": getPrompt("usabot3.2-90")
                 },
                 {
                     "role": "user",
