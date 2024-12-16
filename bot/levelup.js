@@ -13,11 +13,11 @@ client.on("messageCreate", async message => {
             const user = await client.users.fetch(userId);
             const userName = config.users[userId] ?? (user.displayName ?? "生徒");
             const level = Number(message.content.split(":")[1]);
-            const usabot_stu = Model.models.get("usabot3.2-90");
+            const usabot_stu = Model.current
             let blessingMessage = {
                 content: "おめでとうございます！"
             }
-            if (usabot_stu.ready) blessingMessage = await usabot_stu.query(`「${userName}」という人物のDiscordのレベルが${level - 1}から${level}に上がったみたいです！祝ってください`)
+            if (usabot_stu.ready) blessingMessage = await usabot_stu.ask(`「${userName}」という人物のDiscordのレベルが${level - 1}から${level}に上がったみたいです！祝ってください`)
             const color = (Math.random() * 0xFFFFFF | 0).toString(16);
             const randomColor = "#" + ("000000" + color).slice(-6);
             const channel = client.channels.cache.get(config.levelNoticeChannelId);
@@ -25,7 +25,7 @@ client.on("messageCreate", async message => {
                 embeds: [
                     new EmbedBuilder()
                     .setTitle(`🌟❯❯❯LEVEL UP[ ${level} ]`)
-                    .setDescription(blessingMessage.content || "うさぼっと")
+                    .setDescription(blessingMessage || "うさぼっと")
                     .setColor(randomColor)
                     .setThumbnail(user.avatarURL())
                 ]

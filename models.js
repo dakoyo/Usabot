@@ -45,8 +45,8 @@ new Model("うさぼっとFAST")
 
 new Model("うさぼっと4")
     .setAvatarURL("https://ul.h3z.jp/d0wew77m.png")
-    .setCommandOptionName("usabot3.2-90")
-    .setDescription("高速で、能力の高いモデル。llama-3.2-90bをチューニングして開発")
+    .setCommandOptionName("llama-3.3-70b")
+    .setDescription("高速で、能力の高いモデル。llama-3.3-70bをチューニングして開発")
     .setMode("うさぼっと3.2-90")
     .onAsk(async ev => {
         const { message } = ev;
@@ -75,7 +75,7 @@ new Model("うさぼっと4")
                 },
                 { role: "user", content: question }
             ],
-            model: "llama-3.2-90b-text-preview"
+            model: "llama-3.3-70b-versatile"
         })
         let result = res.choices[0].message.content;
         result = result.split("はい。").join("はーーーい！！");

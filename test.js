@@ -36,9 +36,9 @@ const res = await groq.chat.completions.create({
         },
         { role: "user", content: question }
     ],
-    model: "llama-3.2-90b-text-preview"
+    model: "llama-3.3-70b-versatile"
 })
 console.log(res.choices[0].message.content);
 }
 
-t("これからの人生不安です。就職とか進学とかすべてがストレスです。")
+t("あと30日で共通テストです。僕らに喝を入れてください")
