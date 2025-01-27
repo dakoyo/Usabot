@@ -32,7 +32,7 @@ client.once("ready", async () => {
         if (d.endsWith(".js")) await import(`./bot/${d}`);
     }
     try {
-        await Model.change("llama-3.3-70b");
+        await Model.change("usabot5");
         logger.log("succeed in loadin model:usabot3")
     } catch (error) {
         logger.error(error);
