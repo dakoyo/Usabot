@@ -4,7 +4,6 @@ import client from "./client.js";
 import Groq from "groq-sdk";
 import fs from "fs";
 import config from "./config.js";
-const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY
