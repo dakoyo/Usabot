@@ -85,11 +85,11 @@ new Model("うさぼっとFAST")
         };
     }).register();
 
-    new Model("うさぼっと3.5")
+    new Model("うさぼっと4")
     .setAvatarURL("https://ul.h3z.jp/d0wew77m.png")
-    .setCommandOptionName("usabot3.5")
+    .setCommandOptionName("usabot4")
     .setDescription("うさぼっとである。")
-    .setMode("うさぼっと3.5")
+    .setMode("うさぼっと4")
     .onAsk(async ev => {
         const { message } = ev;
         const question = (message instanceof Message) ? message.content : message;
@@ -166,5 +166,5 @@ new Model("うさぼっとFAST")
         return {
             content: result
         };
-    }).register();
+    });
 import("./client.js");
