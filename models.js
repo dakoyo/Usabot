@@ -158,7 +158,7 @@ new Model("うさぼっとFAST")
                 },
                 { role: "user", content: question }
             ],
-            model: ""
+            model: "deepseek-r1-distill-llama-70b"
         })
         let result = res.choices[0].message.content;
         result = result.split("はい。").join("はーーーい！！");
